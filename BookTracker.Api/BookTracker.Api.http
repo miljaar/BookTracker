@@ -13,3 +13,6 @@ Content-Type: application/json
   "author": "Frank Herbert",
   "year": 1965
 }
+
+### Delete Book
+DELETE {{BookTracker.Api_HostAddress}}/books/2
