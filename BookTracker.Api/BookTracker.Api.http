@@ -2,14 +2,14 @@
 
 ### Get Books
 GET {{BookTracker.Api_HostAddress}}/books
-Accept: application/json
+
 
 ### Create books
 POST {{BookTracker.Api_HostAddress}}/books
 Content-Type: application/json
 
 {
-  "title": "Dune",
+  "title": "ikke",
   "author": "Frank Herbert",
   "year": 1965
 }
