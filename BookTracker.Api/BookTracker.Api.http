@@ -16,3 +16,13 @@ Content-Type: application/json
 
 ### Delete Book
 DELETE {{BookTracker.Api_HostAddress}}/books/2
+
+### Update Book
+PUT {{BookTracker.Api_HostAddress}}/books/30
+Content-Type: application/json
+
+{
+  "title": "Changes",
+  "author": "David Bowie",
+  "year": 1971
+}
