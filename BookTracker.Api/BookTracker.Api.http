@@ -3,6 +3,8 @@
 ### Get Books
 GET {{BookTracker.Api_HostAddress}}/books
 
+### Get Book by Id
+GET {{BookTracker.Api_HostAddress}}/books/3
 
 ### Create books
 POST {{BookTracker.Api_HostAddress}}/books
