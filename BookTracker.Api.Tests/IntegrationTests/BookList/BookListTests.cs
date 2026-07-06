@@ -6,15 +6,13 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BookTracker.Api.Tests.IntegrationTests.BookList;
 
-public class BookListTests
+public class BookListTests : IntegrationTest
 {
-    private readonly CustomWebApplicationFactory factory = new();
 
     [Fact]
     public async Task GetBooksReturnsBooks()
     {
-        var writer = factory.GetWriter();
-        writer.Seed(db => db.Books.Add(
+        Writer.Seed(db => db.Books.Add(
             new Book
             {
                 Title = "Cannery Row",
@@ -23,9 +21,7 @@ public class BookListTests
             }
         ));
 
-        var client = factory.CreateClient();
-
-        var response = await client.GetAsync("/books");
+        var response = await Client.GetAsync("/books");
         var books = await response.Content.ReadFromJsonAsync<List<BookInfo>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
