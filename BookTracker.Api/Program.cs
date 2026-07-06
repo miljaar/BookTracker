@@ -1,9 +1,11 @@
-using BookTracker.Api.Application;
 using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 using BookTracker.Api.Endpoints;
 using BookTracker.Api.Application.BookList;
 using BookTracker.Api.Application.GetBookById;
+using BookTracker.Api.Application.DeleteBook;
+using BookTracker.Api.Application.UpdateBook;
+using BookTracker.Api.Application.CreateBook;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IBookRepository, EfBookRepository>();
+
 builder.Services.AddScoped<GetBookListQuery>();
 builder.Services.AddScoped<GetBookByIdQuery>();
-builder.Services.AddScoped<BookService>();
+
+builder.Services.AddScoped<DeleteBookCommandHandler>();
+builder.Services.AddScoped<UpdateBookCommandHandler>();
+builder.Services.AddScoped<CreateBookCommandHandler>();
 
 var app = builder.Build();
 
