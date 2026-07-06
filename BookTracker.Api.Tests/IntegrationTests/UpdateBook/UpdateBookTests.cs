@@ -15,8 +15,8 @@ public class UpdateBookTests : IntegrationTest
             db.Books.Add(
                 new Book
                 {
-                    Title = "Dune",
-                    Author = "Frank Herbert",
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
                     Year = 1965
                 });
         });
@@ -37,8 +37,8 @@ public class UpdateBookTests : IntegrationTest
 
         Assert.NotNull(book);
         Assert.Equal(1969, book.Year);
-        Assert.Equal("Frank Herbert", book.Author);
-        Assert.Equal("Dune Messiah", book.Title);
+        Assert.Equal("Frank Herbert", book.Author.Value);
+        Assert.Equal("Dune Messiah", book.Title.Value);
         Assert.Equal(1, book.Id);
     }
 

@@ -15,8 +15,8 @@ public class BookService(IBookRepository bookRepository)
         var summary = books.Select(book => new BookInfo
         {
             Id = book.Id,
-            Title = book.Title,
-            Author = book.Author
+            Title = book.Title.Value,
+            Author = book.Author.Value
         });
         return [.. summary];
     }
@@ -25,8 +25,8 @@ public class BookService(IBookRepository bookRepository)
         var book =
             new Book
             {
-                Title = request.Title,
-                Author = request.Author,
+                Title = new BookTitle(request.Title),
+                Author = new AuthorName(request.Author),
                 Year = request.Year
             };
         var savedBook = await bookRepository.AddAsync(book);
@@ -34,8 +34,8 @@ public class BookService(IBookRepository bookRepository)
             new CreateBookResponse
             {
                 Id = savedBook.Id,
-                Title = savedBook.Title,
-                Author = savedBook.Author,
+                Title = savedBook.Title.Value,
+                Author = savedBook.Author.Value,
                 Year = savedBook.Year
             };
     }
@@ -50,8 +50,8 @@ public class BookService(IBookRepository bookRepository)
         var book = new Book
         {
             Id = id,
-            Title = request.Title,
-            Author = request.Author,
+            Title = new BookTitle(request.Title),
+            Author = new AuthorName(request.Author),
             Year = request.Year
         };
         return await bookRepository.UpdateAsync(book);
@@ -70,8 +70,8 @@ public class BookService(IBookRepository bookRepository)
             new BookDetails
             {
                 Id = book.Id,
-                Title = book.Title,
-                Author = book.Author,
+                Title = book.Title.Value,
+                Author = book.Author.Value,
                 Year = book.Year
             };
     }
