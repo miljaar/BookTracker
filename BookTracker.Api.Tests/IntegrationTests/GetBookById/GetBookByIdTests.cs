@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using BookTracker.Api.Application.GetBookById;
 using BookTracker.Api.Domain;
 
@@ -22,10 +21,8 @@ public class GetBookByIdTests : IntegrationTest
         );
 
         var response = await Client.GetAsync("/books/1");
-        var book = await response.Content.ReadFromJsonAsync<BookDetails>();
+        var book = await response.ReadJsonAs<BookDetails>(HttpStatusCode.OK);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.NotNull(book);
         Assert.Equal(1, book.Id);
         Assert.Equal("Dune", book.Title);
         Assert.Equal("Frank Herbert", book.Author);

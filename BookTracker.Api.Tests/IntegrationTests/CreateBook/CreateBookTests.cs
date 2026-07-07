@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Json;
 using BookTracker.Api.Application.CreateBook;
 using BookTracker.Api.Domain;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BookTracker.Api.Tests.IntegrationTests.CreateBook;
 
@@ -21,10 +20,8 @@ public class CreateBookTests : IntegrationTest
             };
 
         var response = await Client.PostAsJsonAsync("/books", request);
-        var created = await response.Content.ReadFromJsonAsync<CreateBookResponse>();
+        var created = await response.ReadJsonAs<CreateBookResponse>(HttpStatusCode.Created);
 
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        Assert.NotNull(created);
         Assert.True(created.Id > 0);
         Assert.Equal("The Heart Is a Lonely Hunter", created.Title);
 
@@ -49,6 +46,6 @@ public class CreateBookTests : IntegrationTest
 
         var response = await Client.PostAsJsonAsync("/books", request);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
     }
 }

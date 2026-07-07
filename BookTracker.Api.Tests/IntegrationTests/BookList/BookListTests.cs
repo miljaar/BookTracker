@@ -22,11 +22,8 @@ public class BookListTests : IntegrationTest
         ));
 
         var response = await Client.GetAsync("/books");
-        var result = await response.Content.ReadFromJsonAsync<PagedResult<BookInfo>>();
+        var result = await response.ReadJsonAs<PagedResult<BookInfo>>(HttpStatusCode.OK);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        Assert.NotNull(result);
         var bookInfo = Assert.Single(result.Items);
         Assert.Equal("Cannery Row", bookInfo.Title);
         Assert.Equal("John Steinbeck", bookInfo.Author);
