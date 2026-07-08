@@ -1,10 +1,11 @@
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Storage;
-
-public interface IBookRepository
+namespace BookTracker.Api.Storage
 {
-    Task<Book> AddAsync(Book book);
-    Task<bool> DeleteAsync(int id);
-    Task<bool> UpdateAsync(Book book);
+    public interface IBookRepository
+    {
+        Task<Book> AddAsync(Book book);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> UpdateAsync(Book book);
+    }
 }

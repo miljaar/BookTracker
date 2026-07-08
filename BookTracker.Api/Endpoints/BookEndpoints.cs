@@ -1,83 +1,84 @@
 using BookTracker.Api.Application;
-using BookTracker.Api.Application.BookList;
+using BookTracker.Api.Application.GetBookSummaries;
 using BookTracker.Api.Application.CreateBook;
 using BookTracker.Api.Application.DeleteBook;
-using BookTracker.Api.Application.GetBookById;
+using BookTracker.Api.Application.GetBookDetails;
 using BookTracker.Api.Application.UpdateBook;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Endpoints;
-
-public static class BookEndpoints
+namespace BookTracker.Api.Endpoints
 {
-    public static IEndpointRouteBuilder MapBookEndpoints(this IEndpointRouteBuilder app)
+    public static class BookEndpoints
     {
-        app.MapGet("/books", GetAllBooks);
-        app.MapGet("/books/{id:int}", GetBookById);
-        app.MapPost("/books", CreateBook);
-        app.MapPut("/books/{id:int}", UpdateBook);
-        app.MapDelete("/books/{id:int}", DeleteBook);
-        return app;
-    }
-
-    public static async Task<IResult> GetAllBooks(
-        [AsParameters] GetBookListRequest request,
-        GetBookListQuery query)
-    {
-        var books = await query.Execute(request);
-        return Results.Ok(books);
-    }
-
-    public static async Task<IResult> GetBookById(int id, GetBookByIdQuery query)
-    {
-        var book = await query.Execute(id);
-
-        if (book is null)
+        public static IEndpointRouteBuilder MapBookEndpoints(this IEndpointRouteBuilder app)
         {
-            return Results.NotFound();
+            app.MapGet("/books", GetBookSummaries);
+            app.MapGet("/books/{id:int}", GetBookDetails);
+            app.MapPost("/books", CreateBook);
+            app.MapPut("/books/{id:int}", UpdateBook);
+            app.MapDelete("/books/{id:int}", DeleteBook);
+            return app;
         }
 
-        return Results.Ok(book);
-    }
-
-    public static async Task<IResult> CreateBook(CreateBookRequest request, CreateBookCommandHandler handler)
-    {
-        try
+        public static async Task<IResult> GetBookSummaries(
+            [AsParameters] GetBookSummariesRequest request,
+            GetBookSummariesQueryHandler query)
         {
-            var response = await handler.Execute(request);
-            return Results.Created($"/books/{response.Id}", response);
+            var books = await query.Execute(request);
+            return Results.Ok(books);
         }
-        catch (DomainException exception)
-        {
-            return Results.BadRequest(new { error = exception.Message });
-        }
-    }
 
-    public static async Task<IResult> UpdateBook(int id, UpdateBookRequest request, UpdateBookCommandHandler handler)
-    {
-        try
+        public static async Task<IResult> GetBookDetails(int id, GetBookDetailsQueryHandler query)
         {
-            var updated = await handler.Execute(id, request);
+            var book = await query.Execute(id);
 
-            if (!updated)
+            if (book is null)
             {
                 return Results.NotFound();
             }
 
+            return Results.Ok(book);
+        }
+
+        public static async Task<IResult> CreateBook(CreateBookRequest request, CreateBookCommandHandler handler)
+        {
+            try
+            {
+                var response = await handler.Execute(request);
+                return Results.Created($"/books/{response.Id}", response);
+            }
+            catch (DomainException exception)
+            {
+                return Results.BadRequest(new { error = exception.Message });
+            }
+        }
+
+        public static async Task<IResult> UpdateBook(int id, UpdateBookRequest request, UpdateBookCommandHandler handler)
+        {
+            try
+            {
+                var updated = await handler.Execute(id, request);
+
+                if (!updated)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.NoContent();
+            }
+            catch (DomainException exception)
+            {
+                return Results.BadRequest(new { error = exception.Message });
+            }
+
+        }
+
+        public static async Task<IResult> DeleteBook(int id, DeleteBookCommandHandler handler)
+        {
+            var deleted = await handler.Execute(id);
+            if (!deleted)
+                return Results.NotFound();
             return Results.NoContent();
         }
-        catch (DomainException exception)
-        {
-            return Results.BadRequest(new { error = exception.Message });
-        }
-
-    }
-
-    public static async Task<IResult> DeleteBook(int id, DeleteBookCommandHandler handler)
-    {
-        var deleted = await handler.Execute(id);
-        if (!deleted)
-            return Results.NotFound();
-        return Results.NoContent();
     }
 }

@@ -1,5 +1,5 @@
 using System.Net;
-using BookTracker.Api.Application.GetBookById;
+using BookTracker.Api.Application.GetBookDetails;
 using BookTracker.Api.Domain;
 
 namespace BookTracker.Api.Tests.IntegrationTests.GetBookById;
@@ -7,7 +7,7 @@ namespace BookTracker.Api.Tests.IntegrationTests.GetBookById;
 public class GetBookByIdTests : IntegrationTest
 {
     [Fact]
-    public async Task GetBookByIdReturnsBook()
+    public async Task GetBookDetailsReturnsBookDetail()
     {
         Writer.Seed(db =>
             db.Books.Add(
@@ -21,7 +21,7 @@ public class GetBookByIdTests : IntegrationTest
         );
 
         var response = await Client.GetAsync("/books/1");
-        var book = await response.ReadJsonAs<BookDetails>(HttpStatusCode.OK);
+        var book = await response.ReadJsonAs<GetBookDetailsResponse>(HttpStatusCode.OK);
 
         Assert.Equal(1, book.Id);
         Assert.Equal("Dune", book.Title);
@@ -30,7 +30,7 @@ public class GetBookByIdTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetBookByIdReturnsNotFoundWhenBookDoesNotExist()
+    public async Task GetBookDetailsReturnsNotFoundWhenBookDoesNotExist()
     {
         var response = await Client.GetAsync("/books/9999");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

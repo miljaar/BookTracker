@@ -1,11 +1,12 @@
 using BookTracker.Api.Storage;
 
-namespace BookTracker.Api.Application.DeleteBook;
-
-public class DeleteBookCommandHandler(IBookRepository bookRepository)
+namespace BookTracker.Api.Application.DeleteBook
 {
-    public async Task<bool> Execute(int id)
+    public class DeleteBookCommandHandler(IBookRepository bookRepository)
     {
-        return await bookRepository.DeleteAsync(id);
+        public async Task<bool> Execute(int id)
+        {
+            return await bookRepository.DeleteAsync(id);
+        }
     }
 }

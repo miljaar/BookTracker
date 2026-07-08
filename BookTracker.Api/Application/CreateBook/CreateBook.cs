@@ -1,8 +1,9 @@
-namespace BookTracker.Api.Application.CreateBook;
-
-public class CreateBookRequest
+namespace BookTracker.Api.Application.CreateBook
 {
-    public required string Title { get; set; }
-    public required string Author { get; set; }
-    public int Year { get; set; }
+    public class CreateBookRequest
+    {
+        public required string Title { get; set; }
+        public required string Author { get; set; }
+        public int Year { get; set; }
+    }
 }
