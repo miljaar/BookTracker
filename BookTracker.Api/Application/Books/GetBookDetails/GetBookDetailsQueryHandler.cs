@@ -1,7 +1,7 @@
 using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookTracker.Api.Application.GetBookDetails;
+namespace BookTracker.Api.Application.Books.GetBookDetails;
 
 public class GetBookDetailsQueryHandler(AppDbContext dbContext) : IHandler
 {

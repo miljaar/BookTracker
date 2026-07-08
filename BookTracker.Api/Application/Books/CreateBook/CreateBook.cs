@@ -1,4 +1,4 @@
-namespace BookTracker.Api.Application.CreateBook
+namespace BookTracker.Api.Application.Books.CreateBook
 {
     public class CreateBookRequest
     {

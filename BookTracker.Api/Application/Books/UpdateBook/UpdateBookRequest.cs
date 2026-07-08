@@ -1,4 +1,4 @@
-namespace BookTracker.Api.Application.UpdateBook
+namespace BookTracker.Api.Application.Books.UpdateBook
 {
     public class UpdateBookRequest
     {

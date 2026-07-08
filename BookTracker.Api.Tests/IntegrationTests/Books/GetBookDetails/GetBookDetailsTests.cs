@@ -1,10 +1,10 @@
 using System.Net;
-using BookTracker.Api.Application.GetBookDetails;
+using BookTracker.Api.Application.Books.GetBookDetails;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.IntegrationTests.GetBookById;
+namespace BookTracker.Api.Tests.IntegrationTests.Books.GetBookDetails;
 
-public class GetBookByIdTests : IntegrationTest
+public class GetBookDetailsTests : IntegrationTest
 {
     [Fact]
     public async Task GetBookDetailsReturnsBookDetail()

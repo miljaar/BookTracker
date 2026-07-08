@@ -1,9 +1,9 @@
 using BookTracker.Api.Application;
-using BookTracker.Api.Application.GetBookSummaries;
-using BookTracker.Api.Application.CreateBook;
-using BookTracker.Api.Application.DeleteBook;
-using BookTracker.Api.Application.GetBookDetails;
-using BookTracker.Api.Application.UpdateBook;
+using BookTracker.Api.Application.Books.GetBookSummaries;
+using BookTracker.Api.Application.Books.CreateBook;
+using BookTracker.Api.Application.Books.DeleteBook;
+using BookTracker.Api.Application.Books.GetBookDetails;
+using BookTracker.Api.Application.Books.UpdateBook;
 using BookTracker.Api.Domain;
 
 namespace BookTracker.Api.Endpoints

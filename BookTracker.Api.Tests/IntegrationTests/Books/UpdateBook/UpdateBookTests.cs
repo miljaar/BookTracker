@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using BookTracker.Api.Application.UpdateBook;
+using BookTracker.Api.Application.Books.UpdateBook;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.IntegrationTests.UpdateBook;
+namespace BookTracker.Api.Tests.IntegrationTests.Books.UpdateBook;
 
 public class UpdateBookTests : IntegrationTest
 {

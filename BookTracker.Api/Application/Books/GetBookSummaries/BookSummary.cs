@@ -1,4 +1,4 @@
-namespace BookTracker.Api.Application.GetBookSummaries
+namespace BookTracker.Api.Application.Books.GetBookSummaries
 {
     public class BookSummary
     {

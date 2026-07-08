@@ -1,6 +1,6 @@
 using BookTracker.Api.Storage;
 
-namespace BookTracker.Api.Application.DeleteBook
+namespace BookTracker.Api.Application.Books.DeleteBook
 {
     public class DeleteBookCommandHandler(IBookRepository bookRepository) : IHandler
     {

@@ -1,7 +1,7 @@
 using System.Net;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.IntegrationTests.DeleteBook;
+namespace BookTracker.Api.Tests.IntegrationTests.Books.DeleteBook;
 
 public class DeleteBookTests : IntegrationTest
 {

@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using BookTracker.Api.Application;
-using BookTracker.Api.Application.GetBookSummaries;
+using BookTracker.Api.Application.Books.GetBookSummaries;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.IntegrationTests.BookList;
+namespace BookTracker.Api.Tests.IntegrationTests.Books.GetBookSummaries;
 
-public class BookListTests : IntegrationTest
+public class GetBookSummariesTests : IntegrationTest
 {
 
     [Fact]

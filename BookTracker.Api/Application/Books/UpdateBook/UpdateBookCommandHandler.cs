@@ -1,7 +1,7 @@
 using BookTracker.Api.Domain;
 using BookTracker.Api.Storage;
 
-namespace BookTracker.Api.Application.UpdateBook
+namespace BookTracker.Api.Application.Books.UpdateBook
 {
     public class UpdateBookCommandHandler(IBookRepository bookRepository) : IHandler
     {
