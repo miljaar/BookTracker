@@ -1,4 +1,5 @@
 using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Members;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookTracker.Api.Storage
@@ -7,6 +8,7 @@ namespace BookTracker.Api.Storage
         : DbContext(options)
     {
         public DbSet<Book> Books => Set<Book>();
+        public DbSet<Member> Members => Set<Member>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +25,24 @@ namespace BookTracker.Api.Storage
                     name => name.Value,
                     value => new AuthorName(value))
                 .HasMaxLength(AuthorName.MaxLength);
+            });
+
+            modelBuilder.Entity<Member>(member =>
+            {
+                member.Property(m => m.Email)
+                    .HasConversion(
+                        email => email.Value,
+                        value => new MemberEmail(value))
+                    .HasMaxLength(MemberEmail.MaxLength);
+            });
+
+            modelBuilder.Entity<Member>(member =>
+            {
+                member.Property(m => m.Name)
+                    .HasConversion(
+                        name => name.Value,
+                        value => new MemberName(value))
+                    .HasMaxLength(MemberName.MaxLength);
             });
         }
     }
