@@ -1,5 +1,7 @@
+using BookTracker.Api.Application.Members.CreateMember;
 using BookTracker.Api.Application.Members.GetMemberDetails;
 using BookTracker.Api.Application.Members.GetMemberSummaries;
+using BookTracker.Api.Domain;
 
 namespace BookTracker.Api.Endpoints.Members;
 
@@ -9,6 +11,7 @@ public static class MemberEndpoints
     {
         app.MapGet("/members", GetMemberSummaries);
         app.MapGet("/members/{id:int}", GetMemberDetails);
+        app.MapPost("/members", CreateMember);
         return app;
     }
 
@@ -23,5 +26,18 @@ public static class MemberEndpoints
         if (member is null)
             return Results.NotFound();
         return Results.Ok(member);
+    }
+
+    public static async Task<IResult> CreateMember(CreateMemberRequest request, CreateMemberRequestHandler query)
+    {
+        try
+        {
+            var member = await query.Execute(request);
+            return Results.Created($"/members/{member.Id}", member);
+        }
+        catch (DomainException ex)
+        {
+            return Results.BadRequest(new { error = ex.Message });
+        }
     }
 }
