@@ -66,3 +66,6 @@ Content-Type: application/json
   "name": "iemandanders",
   "email": "nie@gij.com"
 }
+
+### Delete Member
+DELETE {{BookTracker.Api_HostAddress}}/members/2
