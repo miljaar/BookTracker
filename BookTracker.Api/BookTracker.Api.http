@@ -46,6 +46,9 @@ GET {{BookTracker.Api_HostAddress}}/books?search=octopus&page=2&pageSize=10
 ### Get Members Page 1
 GET {{BookTracker.Api_HostAddress}}/members
 
+### Get Member
+GET {{BookTracker.Api_HostAddress}}/members/1
+
 ### Create members
 POST {{BookTracker.Api_HostAddress}}/members
 Content-Type: application/json
@@ -53,4 +56,13 @@ Content-Type: application/json
 {
   "name": "gij",
   "email": "tomgijgij.gij"
+}
+
+### Update member
+PUT {{BookTracker.Api_HostAddress}}/members/1
+Content-Type: application/json
+
+{
+  "name": "iemandanders",
+  "email": "nie@gij.com"
 }
