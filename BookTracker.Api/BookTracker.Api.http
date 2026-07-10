@@ -40,3 +40,6 @@ GET {{BookTracker.Api_HostAddress}}/books?search=octopus
 
 ### Search Books with paging
 GET {{BookTracker.Api_HostAddress}}/books?search=octopus&page=2&pageSize=10
+
+### Get Members Page 1
+GET {{BookTracker.Api_HostAddress}}/members
