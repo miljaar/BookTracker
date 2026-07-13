@@ -7,13 +7,13 @@ public sealed record MemberEmail
 
     public MemberEmail(string value)
     {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new DomainException("Memberemail is required.");
+
         var cleaned = value.Trim();
 
-        if (string.IsNullOrWhiteSpace(cleaned))
-            throw new DomainException("Memberemail is required");
-
         if (!cleaned.Contains('@'))
-            throw new DomainException("Memberemail should contain a valid email");
+            throw new DomainException("Memberemail should contain a valid email.");
 
         if (cleaned.Length > MaxLength)
             throw new DomainException($"Memberemail should not exceed {MaxLength} characters.");

@@ -22,14 +22,22 @@ public class MemberEmailTests
     public void MemberEmailRejectsWhitespaces()
     {
         var ex = Assert.Throws<DomainException>(() => new MemberEmail("    "));
-        Assert.Equal("Memberemail is required", ex.Message);
+        Assert.Equal("Memberemail is required.", ex.Message);
+    }
+
+    [Fact]
+    public void MemberEmailRejectsNull()
+    {
+        var exception = Assert.Throws<DomainException>(() => new MemberEmail(null!));
+
+        Assert.Equal("Memberemail is required.", exception.Message);
     }
 
     [Fact]
     public void MemberEmailRejectsInvalidMail()
     {
         var ex = Assert.Throws<DomainException>(() => new MemberEmail("novalidemail.com"));
-        Assert.Equal("Memberemail should contain a valid email", ex.Message);
+        Assert.Equal("Memberemail should contain a valid email.", ex.Message);
     }
 
     [Fact]

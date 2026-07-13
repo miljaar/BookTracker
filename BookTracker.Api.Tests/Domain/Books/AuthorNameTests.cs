@@ -28,6 +28,14 @@ public class AuthorNameTests
     }
 
     [Fact]
+    public void AuthorNameRejectsNull()
+    {
+        var exception = Assert.Throws<DomainException>(() => new AuthorName(null!));
+
+        Assert.Equal("Author is required.", exception.Message);
+    }
+
+    [Fact]
     public void AuthorNameRejectsNameLongerThan100Characters()
     {
         var tooLong = new string('x', 101);

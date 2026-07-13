@@ -6,10 +6,10 @@ namespace BookTracker.Api.Domain
         public string Value { get; }
         public BookTitle(string value)
         {
-            var cleaned = value.Trim();
-
-            if (string.IsNullOrWhiteSpace(cleaned))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new DomainException("Title is required.");
+
+            var cleaned = value.Trim();
 
             if (cleaned.Length > MaxLength)
                 throw new DomainException($"Title cannot be longer than {MaxLength} characters.");

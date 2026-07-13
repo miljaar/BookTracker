@@ -36,4 +36,11 @@ public class BookTitleTests
         Assert.Equal("Title cannot be longer than 100 characters.", exception.Message);
     }
 
+    [Fact]
+    public void BookTitleRejectsNull()
+    {
+        var exception = Assert.Throws<DomainException>(() => new BookTitle(null!));
+
+        Assert.Equal("Title is required.", exception.Message);
+    }
 }

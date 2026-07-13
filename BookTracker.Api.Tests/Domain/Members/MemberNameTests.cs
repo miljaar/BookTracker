@@ -22,7 +22,15 @@ public class MemberNameTests
     public void MemberNameRejectsWhitespaces()
     {
         var ex = Assert.Throws<DomainException>(() => new MemberName("    "));
-        Assert.Equal("Membername is required", ex.Message);
+        Assert.Equal("Membername is required.", ex.Message);
+    }
+
+    [Fact]
+    public void MemberNameRejectsNull()
+    {
+        var exception = Assert.Throws<DomainException>(() => new MemberName(null!));
+
+        Assert.Equal("Membername is required.", exception.Message);
     }
 
     [Fact]
