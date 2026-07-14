@@ -46,4 +46,12 @@ public class MemberEmailTests
         var ex = Assert.Throws<DomainException>(() => new MemberEmail(new string('@', 201)));
         Assert.Equal("Memberemail should not exceed 200 characters.", ex.Message);
     }
+
+    [Fact]
+    public void MemberEmailNormalizesValue()
+    {
+        var email = new MemberEmail("  Ada@Example.com  ");
+
+        Assert.Equal("ada@example.com", email.Value);
+    }
 }

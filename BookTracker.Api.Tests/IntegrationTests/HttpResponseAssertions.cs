@@ -47,7 +47,9 @@ public static class HttpResponseAssertions
         }
     }
 
-    public static async Task ShouldHaveStatusCode(this HttpResponseMessage response, HttpStatusCode expectedStatusCode)
+    public static async Task ShouldHaveStatusCode(this HttpResponseMessage response,
+    HttpStatusCode expectedStatusCode,
+    string expectedBodyMessage = "")
     {
         var body = await response.Content.ReadAsStringAsync();
 
@@ -63,5 +65,12 @@ public static class HttpResponseAssertions
              Response body:
              {body}
              """);
+
+
+        if (!string.IsNullOrEmpty(expectedBodyMessage))
+        {
+            Assert.Contains(expectedBodyMessage, body);
+        }
+
     }
 }

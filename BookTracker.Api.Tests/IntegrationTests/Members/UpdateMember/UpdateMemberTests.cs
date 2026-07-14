@@ -51,7 +51,7 @@ public class UpdateMemberTests : IntegrationTest
         };
 
         var response = await Client.PutAsJsonAsync("/members/999", memberUpdated);
-        var result = response.ShouldHaveStatusCode(HttpStatusCode.NotFound);
+        await response.ShouldHaveStatusCode(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -72,6 +72,36 @@ public class UpdateMemberTests : IntegrationTest
         };
 
         var response = await Client.PutAsJsonAsync("/members/999", memberUpdated);
-        var result = response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
+        await response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
     }
+
+    [Fact]
+    public async Task UpdateMemberCantUseExistingEmail()
+    {
+        Writer.Seed(db => db.Members.Add(
+            new Member
+            {
+                Name = new MemberName("Dimitri De Tremmerie"),
+                Email = new MemberEmail("ddt@brt.be")
+            }
+        ));
+
+        Writer.Seed(db => db.Members.Add(
+            new Member
+            {
+                Name = new MemberName("Els soens"),
+                Email = new MemberEmail("els@dings.be")
+            }
+        ));
+
+        var memberUpdated = new UpdateMemberRequest
+        {
+            Name = "Tom",
+            Email = "els@dings.be"
+        };
+
+        var response = await Client.PutAsJsonAsync("/members/1", memberUpdated);
+        await response.ShouldHaveStatusCode(HttpStatusCode.Conflict, "A member with this email already exists.");
+    }
+
 }

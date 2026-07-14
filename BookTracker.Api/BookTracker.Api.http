@@ -54,8 +54,9 @@ POST {{BookTracker.Api_HostAddress}}/members
 Content-Type: application/json
 
 {
-  "name": "gij",
-  "email": "tomgijgij.gij"
+  "name": "Mats Cools",
+  "email": "mats@dings.com",
+  "password": "ValidPassword"
 }
 
 ### Update member

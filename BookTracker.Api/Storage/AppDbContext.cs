@@ -34,6 +34,9 @@ namespace BookTracker.Api.Storage
                         email => email.Value,
                         value => new MemberEmail(value))
                     .HasMaxLength(MemberEmail.MaxLength);
+
+                member.HasIndex(current => current.Email)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<Member>(member =>
