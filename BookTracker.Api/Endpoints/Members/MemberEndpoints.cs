@@ -5,6 +5,7 @@ using BookTracker.Api.Application.Members.GetMemberDetails;
 using BookTracker.Api.Application.Members.GetMemberSummaries;
 using BookTracker.Api.Application.Members.UpdateMember;
 using BookTracker.Api.Domain;
+using System.Security.Claims;
 
 namespace BookTracker.Api.Endpoints.Members;
 
@@ -15,8 +16,12 @@ public static class MemberEndpoints
         app.MapGet("/members", GetMemberSummaries);
         app.MapGet("/members/{id:int}", GetMemberDetails);
         app.MapPost("/members", CreateMember);
-        app.MapPut("/members/{id:int}", UpdateMember);
-        app.MapDelete("/members/{id:int}", DeleteMember);
+
+        app.MapPut("/members/{id:int}", UpdateMember)
+            .RequireAuthorization();
+        app.MapDelete("/members/{id:int}", DeleteMember)
+            .RequireAuthorization();
+
         return app;
     }
 
@@ -33,7 +38,9 @@ public static class MemberEndpoints
         return Results.Ok(member);
     }
 
-    public static async Task<IResult> CreateMember(CreateMemberRequest request, CreateMemberCommandHandler handler)
+    public static async Task<IResult> CreateMember(
+        CreateMemberRequest request,
+        CreateMemberCommandHandler handler)
     {
         try
         {
@@ -53,8 +60,12 @@ public static class MemberEndpoints
     public static async Task<IResult> UpdateMember(
         int id,
         UpdateMemberRequest request,
+        ClaimsPrincipal user,
         UpdateMemberRequestHandler handler)
     {
+        if (!IsCurrentMember(user, id))
+            return Results.Forbid();
+
         try
         {
             var updated = await handler.Execute(id, request);
@@ -72,11 +83,26 @@ public static class MemberEndpoints
         }
     }
 
-    public static async Task<IResult> DeleteMember(int id, DeleteMemberHandler handler)
+    public static async Task<IResult> DeleteMember(
+        int id,
+        ClaimsPrincipal user,
+        DeleteMemberHandler handler)
     {
+        if (!IsCurrentMember(user, id))
+            return Results.Forbid();
+
         var deleted = await handler.Execute(id);
+
         if (!deleted)
             return Results.NotFound();
+
         return Results.NoContent();
+    }
+
+    private static bool IsCurrentMember(ClaimsPrincipal user, int memberId)
+    {
+        var claim = user.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        return int.TryParse(claim, out var currentMemberId) && currentMemberId == memberId;
     }
 }

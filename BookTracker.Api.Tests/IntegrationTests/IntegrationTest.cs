@@ -1,5 +1,9 @@
 using BookTracker.Api.Domain.Members;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using BookTracker.Api.Application.Auth.Login;
 
 namespace BookTracker.Api.Tests.IntegrationTests;
 
@@ -16,12 +20,16 @@ public abstract class IntegrationTest : IDisposable
         Reader = factory.GetReader();
         Writer = factory.GetWriter();
     }
-    protected void SeedMember(string password = "analytical-engine")
+
+    protected int SeedMember(
+        string name = "Ada Lovelace",
+        string email = "ada@example.com",
+        string password = "analytical-engine")
     {
         var member = new Member
         {
-            Name = new MemberName("Ada Lovelace"),
-            Email = new MemberEmail("ada@example.com"),
+            Name = new MemberName(name),
+            Email = new MemberEmail(email),
             PasswordHash = string.Empty
         };
 
@@ -30,6 +38,35 @@ public abstract class IntegrationTest : IDisposable
         member.PasswordHash = passwordHasher.HashPassword(member, password);
 
         Writer.Seed(db => db.Members.Add(member));
+        return member.Id;
+    }
+
+    protected async Task<int> AuthenticateAsMember(
+        string name = "Ada Lovelace",
+        string email = "ada@example.com",
+        string password = "analytical-engine")
+    {
+        var memberId = SeedMember(
+            name,
+            email,
+            password
+        );
+
+        var request = new LoginRequest
+        {
+            Email = email,
+            Password = password
+        };
+
+        var response = await Client.PostAsJsonAsync("/auth/login", request);
+        var login = await response.ReadJsonAs<LoginResponse>(HttpStatusCode.OK);
+
+        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            login.AccessToken
+        );
+
+        return memberId;
     }
 
     public void Dispose()

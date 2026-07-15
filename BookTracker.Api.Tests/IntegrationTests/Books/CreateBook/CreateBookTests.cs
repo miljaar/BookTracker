@@ -11,6 +11,8 @@ public class CreateBookTests : IntegrationTest
     [Fact]
     public async Task PostBookCreatesBook()
     {
+        await AuthenticateAsMember();
+
         var request =
             new CreateBookRequest
             {
@@ -36,6 +38,8 @@ public class CreateBookTests : IntegrationTest
     [Fact]
     public async Task PostBookReturnsBadRequestWhenTitleIsWhitespace()
     {
+        await AuthenticateAsMember();
+
         var request =
             new CreateBookRequest
             {

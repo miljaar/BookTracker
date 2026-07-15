@@ -10,13 +10,7 @@ public class UpdateMemberTests : IntegrationTest
     [Fact]
     public async Task UpdateMemberUpdatesAMember()
     {
-        Writer.Seed(db => db.Members.Add(
-            new Member
-            {
-                Name = new MemberName("Dimitri De Tremmerie"),
-                Email = new MemberEmail("ddt@brt.be")
-            }
-        ));
+        var memberId = await AuthenticateAsMember();
 
         var memberUpdated = new UpdateMemberRequest
         {
@@ -24,25 +18,19 @@ public class UpdateMemberTests : IntegrationTest
             Email = "tom@tom.tom"
         };
 
-        var response = await Client.PutAsJsonAsync("/members/1", memberUpdated);
+        var response = await Client.PutAsJsonAsync($"/members/{memberId}", memberUpdated);
         var result = response.ShouldHaveStatusCode(HttpStatusCode.NoContent);
 
-        var memberCheck = Reader.Query(context => context.Members.Find(1));
+        var memberCheck = Reader.Query(context => context.Members.Find(memberId));
         Assert.NotNull(memberCheck);
         Assert.Equal("Tom", memberCheck.Name);
         Assert.Equal("tom@tom.tom", memberCheck.Email);
     }
 
     [Fact]
-    public async Task UpdateMemberReturnsNotFoundForUnknownId()
+    public async Task UpdateMemberReturnsForbiddenForUnknownId()
     {
-        Writer.Seed(db => db.Members.Add(
-            new Member
-            {
-                Name = new MemberName("Dimitri De Tremmerie"),
-                Email = new MemberEmail("ddt@brt.be")
-            }
-        ));
+        var memberId = await AuthenticateAsMember();
 
         var memberUpdated = new UpdateMemberRequest
         {
@@ -50,20 +38,14 @@ public class UpdateMemberTests : IntegrationTest
             Email = "tom@tom.tom"
         };
 
-        var response = await Client.PutAsJsonAsync("/members/999", memberUpdated);
-        await response.ShouldHaveStatusCode(HttpStatusCode.NotFound);
+        var response = await Client.PutAsJsonAsync($"/members/{memberId + 999}", memberUpdated);
+        await response.ShouldHaveStatusCode(HttpStatusCode.Forbidden);
     }
 
     [Fact]
     public async Task UpdateMemberReturnsNotFoundForInvalidEmail()
     {
-        Writer.Seed(db => db.Members.Add(
-            new Member
-            {
-                Name = new MemberName("Dimitri De Tremmerie"),
-                Email = new MemberEmail("ddt@brt.be")
-            }
-        ));
+        var memberId = await AuthenticateAsMember();
 
         var memberUpdated = new UpdateMemberRequest
         {
@@ -71,20 +53,14 @@ public class UpdateMemberTests : IntegrationTest
             Email = "tomtom.tom"
         };
 
-        var response = await Client.PutAsJsonAsync("/members/999", memberUpdated);
+        var response = await Client.PutAsJsonAsync($"/members/{memberId}", memberUpdated);
         await response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task UpdateMemberCantUseExistingEmail()
     {
-        Writer.Seed(db => db.Members.Add(
-            new Member
-            {
-                Name = new MemberName("Dimitri De Tremmerie"),
-                Email = new MemberEmail("ddt@brt.be")
-            }
-        ));
+        var memberId = await AuthenticateAsMember();
 
         Writer.Seed(db => db.Members.Add(
             new Member
@@ -100,7 +76,7 @@ public class UpdateMemberTests : IntegrationTest
             Email = "els@dings.be"
         };
 
-        var response = await Client.PutAsJsonAsync("/members/1", memberUpdated);
+        var response = await Client.PutAsJsonAsync($"/members/{memberId}", memberUpdated);
         await response.ShouldHaveStatusCode(HttpStatusCode.Conflict, "A member with this email already exists.");
     }
 
