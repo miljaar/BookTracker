@@ -70,3 +70,16 @@ Content-Type: application/json
 
 ### Delete Member
 DELETE {{BookTracker.Api_HostAddress}}/members/2
+
+### login member
+POST {{BookTracker.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "mats@dings.com",
+  "password": "ValidPassword"
+}
+
+### current member
+GET {{BookTracker.Api_HostAddress}}/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTWF0cyBDb29scyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Im1hdHNAZGluZ3MuY29tIiwiZXhwIjoxNzg0MTA3MTc2LCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.BYCSAAFuKrAbS_d7aIJO_epPjpUZ-WuNMXLDPDRImuI

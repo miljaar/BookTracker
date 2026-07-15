@@ -1,4 +1,5 @@
 using BookTracker.Api.Endpoints;
+using BookTracker.Api.Endpoints.Auth;
 using BookTracker.Api.Endpoints.Members;
 using BookTracker.Api.Seeding;
 using BookTracker.Api.Storage;
@@ -23,6 +24,10 @@ public static class WebApplicationExtensions
             }
         }
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapAuthEndpoints();
         app.MapBookEndpoints();
         app.MapMemberEndpoints();
 
