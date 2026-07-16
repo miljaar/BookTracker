@@ -26,7 +26,8 @@ public class CreateMemberCommandHandler(
         var member = new Member
         {
             Name = name,
-            Email = email
+            Email = email,
+            Role = MemberRole.Member
         };
 
         member.PasswordHash = passwordHasher.HashPassword(member, request.Password);

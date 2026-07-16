@@ -120,4 +120,25 @@ public class CreateMemberTests : IntegrationTest
         var response2 = await Client.PostAsJsonAsync("/members", request2);
         await response2.ShouldHaveStatusCode(HttpStatusCode.Conflict, "A member with this email already exists.");
     }
+
+    [Fact]
+    public async Task CreateMemberCreatesRegularMember()
+    {
+        var request = new CreateMemberRequest
+        {
+            Name = "Grace Hopper",
+            Email = "grace@example.com",
+            Password = "debugging-moth"
+        };
+
+        var response = await Client.PostAsJsonAsync("/members", request);
+
+        var created = await response.ReadJsonAs<CreateMemberResponse>(HttpStatusCode.Created);
+
+        var member = Reader.Query(db => db.Members.Find(created.Id));
+
+        Assert.NotNull(member);
+
+        Assert.Equal(MemberRole.Member, member.Role);
+    }
 }

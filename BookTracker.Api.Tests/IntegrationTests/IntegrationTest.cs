@@ -24,13 +24,15 @@ public abstract class IntegrationTest : IDisposable
     protected int SeedMember(
         string name = "Ada Lovelace",
         string email = "ada@example.com",
-        string password = "analytical-engine")
+        string password = "analytical-engine",
+        MemberRole role = MemberRole.Member)
     {
         var member = new Member
         {
             Name = new MemberName(name),
             Email = new MemberEmail(email),
-            PasswordHash = string.Empty
+            PasswordHash = string.Empty,
+            Role = role
         };
 
         var passwordHasher = new PasswordHasher<Member>();
@@ -42,6 +44,7 @@ public abstract class IntegrationTest : IDisposable
     }
 
     protected async Task<int> AuthenticateAsMember(
+        MemberRole role = MemberRole.Member,
         string name = "Ada Lovelace",
         string email = "ada@example.com",
         string password = "analytical-engine")
@@ -49,7 +52,8 @@ public abstract class IntegrationTest : IDisposable
         var memberId = SeedMember(
             name,
             email,
-            password
+            password,
+            role
         );
 
         var request = new LoginRequest

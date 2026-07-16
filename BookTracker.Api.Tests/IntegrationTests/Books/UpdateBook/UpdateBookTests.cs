@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using BookTracker.Api.Application.Books.UpdateBook;
 using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Members;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Books.UpdateBook;
 
@@ -10,7 +11,7 @@ public class UpdateBookTests : IntegrationTest
     [Fact]
     public async Task PutBookUpdatesBook()
     {
-        await AuthenticateAsMember();
+        await AuthenticateAsMember(MemberRole.Administrator);
 
         Writer.Seed(db =>
         {
@@ -47,7 +48,7 @@ public class UpdateBookTests : IntegrationTest
     [Fact]
     public async Task PutBookReturnsNotFoundWhenBookDoesNotExist()
     {
-        await AuthenticateAsMember();
+        await AuthenticateAsMember(MemberRole.Administrator);
 
         var request =
             new UpdateBookRequest

@@ -1,4 +1,5 @@
 @BookTracker.Api_HostAddress = http://localhost:5239
+@BookTracker.Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQm9vayBUcmFja2VyIEFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AYm9va3RyYWNrZXIubG9jYWwiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNzg0MTk0NjUzLCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.VZ2vXidAFBexPToJE9Mz8b6cgW5TFu4zhY7PXXNp_Kg
 
 ### Get Books
 GET {{BookTracker.Api_HostAddress}}/books
@@ -9,7 +10,7 @@ GET {{BookTracker.Api_HostAddress}}/books/3
 ### Create books
 POST {{BookTracker.Api_HostAddress}}/books
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTWF0cyBDb29scyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Im1hdHNAZGluZ3MuY29tIiwiZXhwIjoxNzg0MTE5NjcyLCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.P5h4aTIczsmBCz_Oe6GTerBrhEilMjTsOLO8iKf7Ytc
+Authorization: Bearer {{BookTracker.Token}}
 
 {
   "title": "ikke",
@@ -19,10 +20,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 
 ### Delete Book
 DELETE {{BookTracker.Api_HostAddress}}/books/2
+Authorization: Bearer {{BookTracker.Token}}
 
 ### Update Book
 PUT {{BookTracker.Api_HostAddress}}/books/30
 Content-Type: application/json
+Authorization: Bearer {{BookTracker.Token}}
 
 {
   "title": "Changes",
@@ -46,9 +49,11 @@ GET {{BookTracker.Api_HostAddress}}/books?search=octopus&page=2&pageSize=10
 
 ### Get Members Page 1
 GET {{BookTracker.Api_HostAddress}}/members
+Authorization: Bearer {{BookTracker.Token}}
 
 ### Get Member
 GET {{BookTracker.Api_HostAddress}}/members/1
+Authorization: Bearer {{BookTracker.Token}}
 
 ### Create members
 POST {{BookTracker.Api_HostAddress}}/members
@@ -61,8 +66,9 @@ Content-Type: application/json
 }
 
 ### Update member
-PUT {{BookTracker.Api_HostAddress}}/members/1
+PUT {{BookTracker.Api_HostAddress}}/members/2
 Content-Type: application/json
+Authorization: Bearer {{BookTracker.Token}}
 
 {
   "name": "iemandanders",
@@ -72,7 +78,7 @@ Content-Type: application/json
 ### Delete Member
 DELETE {{BookTracker.Api_HostAddress}}/members/2
 
-### login member
+### login regular member
 POST {{BookTracker.Api_HostAddress}}/auth/login
 Content-Type: application/json
 
@@ -81,6 +87,15 @@ Content-Type: application/json
   "password": "ValidPassword"
 }
 
+### login Admin member
+POST {{BookTracker.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@booktracker.local",
+  "password": "development-admin-password"
+}
+
 ### current member
 GET {{BookTracker.Api_HostAddress}}/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTWF0cyBDb29scyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Im1hdHNAZGluZ3MuY29tIiwiZXhwIjoxNzg0MTE5NjcyLCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.P5h4aTIczsmBCz_Oe6GTerBrhEilMjTsOLO8iKf7Ytc
+Authorization: Bearer {{BookTracker.Token}}
