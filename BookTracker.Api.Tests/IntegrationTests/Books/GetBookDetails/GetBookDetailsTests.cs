@@ -1,6 +1,6 @@
 using System.Net;
 using BookTracker.Api.Application.Books.GetBookDetails;
-using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Books;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Books.GetBookDetails;
 

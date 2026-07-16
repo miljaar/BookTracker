@@ -1,4 +1,4 @@
-using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Domain.Members;
 using Microsoft.EntityFrameworkCore;
 

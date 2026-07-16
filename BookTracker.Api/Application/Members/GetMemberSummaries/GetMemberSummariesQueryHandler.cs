@@ -1,3 +1,5 @@
+using BookTracker.Api.Domain.Actors;
+using BookTracker.Api.Domain.Members;
 using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +12,12 @@ public class GetMemberSummariesQueryHandler(AppDbContext dbContext) : IHandler
     private const int MinPageSize = 1;
     private const int MaxPageSize = 50;
 
-    public async Task<PagedResult<MemberSummary>> Execute(GetMemberSummariesRequest request)
+    public async Task<PagedResult<MemberSummary>> Execute(
+        Actor actor,
+        GetMemberSummariesRequest request)
     {
+        MemberPermissions.EnsureCanViewDirectory(actor);
+
         var page = Math.Max(1, request.Page ?? DefaultPage);
         var pageSize = Math.Clamp(request.PageSize ?? defaultPageSize, MinPageSize, MaxPageSize);
 

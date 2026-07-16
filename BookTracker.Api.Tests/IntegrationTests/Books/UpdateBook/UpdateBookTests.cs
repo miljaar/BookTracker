@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using BookTracker.Api.Application.Books.UpdateBook;
-using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Domain.Members;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Books.UpdateBook;

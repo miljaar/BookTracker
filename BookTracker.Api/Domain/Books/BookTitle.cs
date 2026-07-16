@@ -1,30 +1,29 @@
-namespace BookTracker.Api.Domain
+namespace BookTracker.Api.Domain.Books;
+
+public sealed record BookTitle
 {
-    public sealed record BookTitle
+    public const int MaxLength = 100;
+    public string Value { get; }
+    public BookTitle(string value)
     {
-        public const int MaxLength = 100;
-        public string Value { get; }
-        public BookTitle(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new DomainException("Title is required.");
+        if (string.IsNullOrWhiteSpace(value))
+            throw new DomainException("Title is required.");
 
-            var cleaned = value.Trim();
+        var cleaned = value.Trim();
 
-            if (cleaned.Length > MaxLength)
-                throw new DomainException($"Title cannot be longer than {MaxLength} characters.");
+        if (cleaned.Length > MaxLength)
+            throw new DomainException($"Title cannot be longer than {MaxLength} characters.");
 
-            Value = cleaned;
-        }
+        Value = cleaned;
+    }
 
-        public static implicit operator string(BookTitle title)
-        {
-            return title.Value;
-        }
+    public static implicit operator string(BookTitle title)
+    {
+        return title.Value;
+    }
 
-        public override string ToString()
-        {
-            return Value;
-        }
+    public override string ToString()
+    {
+        return Value;
     }
 }
