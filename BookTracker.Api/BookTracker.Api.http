@@ -1,6 +1,5 @@
 @BookTracker.Api_HostAddress = http://localhost:5239
-@BookTracker.Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQm9vayBUcmFja2VyIEFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AYm9va3RyYWNrZXIubG9jYWwiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNzg0MTk0NjUzLCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.VZ2vXidAFBexPToJE9Mz8b6cgW5TFu4zhY7PXXNp_Kg
-
+@BookTracker.Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQm9vayBUcmFja2VyIEFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AYm9va3RyYWNrZXIubG9jYWwiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNzg0MjE2MDk5LCJpc3MiOiJCb29rVHJhY2tlciIsImF1ZCI6IkJvb2tUcmFja2VyIn0.GQ27Q0P9KICUaxiYu8df5MS3PCv1QrhBnqaPp7kKRLA
 ### Get Books
 GET {{BookTracker.Api_HostAddress}}/books
 
@@ -23,14 +22,15 @@ DELETE {{BookTracker.Api_HostAddress}}/books/2
 Authorization: Bearer {{BookTracker.Token}}
 
 ### Update Book
-PUT {{BookTracker.Api_HostAddress}}/books/30
+PUT {{BookTracker.Api_HostAddress}}/books/3
 Content-Type: application/json
 Authorization: Bearer {{BookTracker.Token}}
 
 {
   "title": "Changes",
   "author": "David Bowie",
-  "year": 1971
+  "year": 1971,
+  "version": "7982e7ee-9cc4-47e2-9ab2-f608aeeb63dc"
 }
 
 ### Get Books Page 1

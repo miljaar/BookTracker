@@ -1,6 +1,6 @@
 using BookTracker.Api.Domain.Actors;
 using BookTracker.Api.Domain.Books;
-using BookTracker.Api.Storage;
+using BookTracker.Api.Storage.Books;
 
 namespace BookTracker.Api.Application.Books.DeleteBook
 {

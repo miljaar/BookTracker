@@ -1,13 +1,12 @@
-using BookTracker.Api.Application;
 using BookTracker.Api.Application.Books.GetBookSummaries;
 using BookTracker.Api.Application.Books.CreateBook;
 using BookTracker.Api.Application.Books.DeleteBook;
 using BookTracker.Api.Application.Books.GetBookDetails;
 using BookTracker.Api.Application.Books.UpdateBook;
 using BookTracker.Api.Domain;
-using BookTracker.Api.Security;
 using System.Security.Claims;
 using BookTracker.Api.Domain.Books;
+using BookTracker.Api.Storage.Books;
 
 namespace BookTracker.Api.Endpoints
 {
@@ -77,14 +76,16 @@ namespace BookTracker.Api.Endpoints
             {
                 var actor = principal.ToActor();
 
-                var updated = await handler.Execute(actor, id, request);
+                var result = await handler.Execute(actor, id, request);
 
-                if (!updated)
+                return result switch
                 {
-                    return Results.NotFound();
-                }
-
-                return Results.NoContent();
+                    UpdateBookResult.Updated => Results.NoContent(),
+                    UpdateBookResult.NotFound => Results.NotFound(),
+                    UpdateBookResult.Conflict => Results.Conflict(
+                        new { error = "The book was changed by another user." }),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
             catch (ForbiddenOperationException)
             {

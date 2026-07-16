@@ -25,6 +25,9 @@ namespace BookTracker.Api.Storage
                     name => name.Value,
                     value => new AuthorName(value))
                 .HasMaxLength(AuthorName.MaxLength);
+
+                book.Property(b => b.Version)
+                    .IsConcurrencyToken();
             });
 
             modelBuilder.Entity<Member>(member =>

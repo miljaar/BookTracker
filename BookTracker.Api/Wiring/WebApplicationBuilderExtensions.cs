@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
+using BookTracker.Api.Storage.Books;
 
 namespace BookTracker.Api.Wiring;
 
