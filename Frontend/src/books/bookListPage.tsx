@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { FormEvent } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getBooks } from "./booksApi";
 
 const pageSize = 10;
@@ -78,7 +78,9 @@ export function BookListPage() {
                 <ul>
                     {result.items.map((book) => (
                         <li key={book.id}>
-                            <strong>{book.title}</strong> by {book.author}
+                            <Link to={`/books/${book.id}`}>
+                                <strong>{book.title}</strong> by {book.author}
+                            </Link>
                         </li>
                     ))}
                 </ul>
