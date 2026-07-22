@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { ApiError } from "../api";
 import { getBook } from "./booksApi";
+import { EditBookLink } from "./editBookLink";
 
 function readBookId(value: string | undefined) {
     const bookId = Number(value);
@@ -68,6 +69,7 @@ export function BookDetailsPage() {
             <h1>{book.title}</h1>
             <p>Author:{book.author}</p>
             <p>Year:{book.year}</p>
+            <EditBookLink bookId={book.id} />
         </main>
     )
 }

@@ -30,3 +30,10 @@ export type CreateBookResponse = {
     author: string,
     year: number
 };
+
+export type UpdateBookRequest = {
+    title: string,
+    author: string,
+    year: number,
+    version: string
+};
