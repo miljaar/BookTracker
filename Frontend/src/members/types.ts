@@ -9,3 +9,21 @@ export type RegisterMemberResponse = {
     name: string,
     email: string
 };
+
+export type GetMemberRequest = {
+    page: number,
+    pageSize: number,
+    search: string
+}
+
+export type MemberSummary = {
+    id: number,
+    name: string,
+    email: string
+}
+
+export type MemberDetails = {
+    id: number,
+    name: string,
+    email: string
+}

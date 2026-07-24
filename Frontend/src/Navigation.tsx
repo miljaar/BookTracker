@@ -26,6 +26,7 @@ export function Navigation() {
             {hasToken && currentMemberQuery.isSuccess && (
                 <>
                     <Link to="/account">Account</Link>{" "}
+                    <Link to="/members">Members</Link>{" "}
                     <LogoutButton />
                 </>
             )}

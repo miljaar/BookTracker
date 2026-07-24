@@ -31,6 +31,7 @@ export function BookListPage() {
             next.set("page", nextPage.toString());
         }
 
+        // triggers navigation to page with given search params
         setSearchParams(next);
     }
 
