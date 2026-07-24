@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ApiError } from "../api";
 import { useCurrentMember } from "./useCurrentMember";
 import { getAccessToken } from "./tokenStorage";
@@ -32,6 +32,7 @@ export function AccountPage() {
             <h1>{member.name}</h1>
             <p>{member.email}</p>
             <p>Role: {member.role}</p>
+            <Link to="/account/edit">Edit account</Link>
         </main>
     );
 }

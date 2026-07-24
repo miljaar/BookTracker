@@ -3,7 +3,8 @@ import type { PagedResult } from "../types";
 import type {
     MemberSummary, GetMemberRequest,
     RegisterMemberRequest, RegisterMemberResponse,
-    MemberDetails
+    MemberDetails,
+    UpdateMemberRequest
 } from "./types";
 
 export function registerMember(request: RegisterMemberRequest) {
@@ -33,5 +34,12 @@ export function getMember(memberId: number) {
 export function deleteMember(memberId: number) {
     return apiRequestWithoutResponse(`/members/${memberId}`, {
         method: "DELETE"
+    });
+}
+
+export function updateMember(memberId: number, request: UpdateMemberRequest) {
+    return apiRequestWithoutResponse(`/members/${memberId}`, {
+        method: "PUT",
+        body: JSON.stringify(request)
     });
 }

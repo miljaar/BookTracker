@@ -27,3 +27,8 @@ export type MemberDetails = {
     name: string,
     email: string
 }
+
+export type UpdateMemberRequest = {
+    name: string,
+    email: string
+}
