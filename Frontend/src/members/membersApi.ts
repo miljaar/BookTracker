@@ -1,4 +1,4 @@
-import { apiRequest } from "../api";
+import { apiRequest, apiRequestWithoutResponse } from "../api";
 import type { PagedResult } from "../types";
 import type {
     MemberSummary, GetMemberRequest,
@@ -28,4 +28,10 @@ export function getMembers(request: GetMemberRequest) {
 
 export function getMember(memberId: number) {
     return apiRequest<MemberDetails>(`/members/${memberId}`);
+}
+
+export function deleteMember(memberId: number) {
+    return apiRequestWithoutResponse(`/members/${memberId}`, {
+        method: "DELETE"
+    });
 }

@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { getMember } from "./membersApi";
 import { ApiError } from "../api";
+import { EditMemberLink } from "./editMemberLink";
+import { DeleteMemberButton } from "./deleteMemberButton";
 
 function readMemberId(value: string | undefined) {
     const memberId = Number(value);
@@ -22,7 +24,7 @@ export function MemberDetailsPage() {
     }
 
     const memberQuery = useQuery({
-        queryKey: ["member", memberId],
+        queryKey: ["member", "detail", memberId],
         queryFn: () => getMember(memberId)
     });
 
@@ -54,6 +56,8 @@ export function MemberDetailsPage() {
             <Link to="/members">Back to members</Link>
             <h1>{member.name}</h1>
             <p>{member.email}</p>
+            <EditMemberLink memberId={member.id} />
+            <DeleteMemberButton memberId={member.id} name={member.name} />
         </main>
     );
 }
