@@ -77,18 +77,24 @@ export function MemberListPage() {
                 <p>No members found</p>
             ) : (
                 <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                    </tr>
-                    {memberlist.items.map((member) => (
-                        <tr key={member.id}>
-                            <Link to={`/members/${member.id}`}>
-                                <td>{member.name}</td>
-                            </Link>
-                            <td>{member.email}</td>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
                         </tr>
-                    ))}
+                    </thead>
+                    <tbody>
+                        {memberlist.items.map((member) => (
+                            <tr key={member.id}>
+                                <td>
+                                    <Link to={`/members/${member.id}`}>
+                                        {member.name}
+                                    </Link>
+                                </td>
+                                <td>{member.email}</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             )}
 
