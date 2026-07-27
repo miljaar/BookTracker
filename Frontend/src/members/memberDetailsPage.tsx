@@ -14,19 +14,24 @@ export function MemberDetailsPage() {
     const { memberId: memberIdParameter } = useParams();
     const memberId = readMemberId(memberIdParameter)
 
+    const memberQuery = useQuery({
+        queryKey: ["member", "detail", memberId],
+        queryFn: () => {
+            if (memberId === null) {
+                throw new Error("Invalid member id");
+            }
+            return getMember(memberId);
+        }
+    });
+
     if (memberId === null) {
         return (
             <main>
-                <p>Invalid member id.</p>
+                <h1>Invalid member id</h1>
                 <Link to="/members">Back to members</Link>
             </main>
         );
     }
-
-    const memberQuery = useQuery({
-        queryKey: ["member", "detail", memberId],
-        queryFn: () => getMember(memberId)
-    });
 
     if (memberQuery.isPending) {
         return <p>Loading member...</p>;

@@ -7,12 +7,6 @@ import { updateMember } from "../members/membersApi";
 import { ApiError } from "../api";
 import { removeAccessToken } from "./tokenStorage";
 
-
-function readMemberId(value: string | undefined) {
-    const memberId = Number(value);
-    return Number.isInteger(memberId) && memberId > 0 ? memberId : null;
-}
-
 export function EditAccountPage() {
     const [formError, setFormError] = useState<string | null>(null);
     const queryClient = useQueryClient();
@@ -21,17 +15,11 @@ export function EditAccountPage() {
     const memberQuery = useCurrentMember();
     const memberId = memberQuery.data?.id ?? null;
 
-    if (memberId === null) {
-        return (
-            <main>
-                <h1>Invalid member id</h1>
-                <Link to="/account">Back to account</Link>
-            </main>
-        );
-    }
-
     const updateMutation = useMutation({
         mutationFn: (request: UpdateMemberRequest) => {
+            if (memberId === null) {
+                throw new Error("Invalid member id");
+            }
             return updateMember(memberId, request);
         },
         onSuccess: () => {
@@ -63,6 +51,15 @@ export function EditAccountPage() {
             name,
             email
         });
+    }
+
+    if (memberId === null) {
+        return (
+            <main>
+                <h1>Invalid member id</h1>
+                <Link to="/account">Back to account</Link>
+            </main>
+        );
     }
 
     if (memberQuery.isPending) {
