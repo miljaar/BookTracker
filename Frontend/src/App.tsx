@@ -11,6 +11,7 @@ import { Navigation } from "./Navigation";
 import { MemberDetailsPage } from "./members/memberDetailsPage";
 import { MemberListPage } from "./members/memberListPage";
 import { EditAccountPage } from "./auth/editAccountPage";
+import { EditMemberPage } from "./members/editMemberPage";
 
 function HomePage() {
   return <h1>Book Tracker</h1>;
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/books/:bookId/edit" element={<EditBookPage />} />
           <Route path="/members" element={<MemberListPage />} />
           <Route path="/members/:memberId" element={<MemberDetailsPage />} />
+          <Route path="/members/:memberId/edit" element={<EditMemberPage />} />
         </Route>
         <Route path="/books/:bookId" element={<BookDetailsPage />} />
       </Routes >
