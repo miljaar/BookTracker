@@ -5,6 +5,7 @@ using BookTracker.Api.Endpoints.Members;
 using BookTracker.Api.Seeding;
 using BookTracker.Api.Storage;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookTracker.Api.Wiring;
 
@@ -19,7 +20,7 @@ public static class WebApplicationExtensions
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<Member>>();
 
-            dbContext.Database.EnsureCreated();
+            dbContext.Database.Migrate();
 
             if (app.Configuration.GetValue<bool>("SeedDatabase"))
             {
