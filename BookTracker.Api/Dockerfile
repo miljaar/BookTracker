@@ -18,9 +18,6 @@ RUN dotnet publish BookTracker.Api/BookTracker.Api.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# De niet-rootgebruiker heeft schrijfrechten nodig voor de SQLite-volume-map.
-RUN mkdir /data && chown app:app /data
-
 # Neem alleen het gepubliceerde resultaat uit de build stage over.
 COPY --from=build /app/publish .
 
