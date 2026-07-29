@@ -3,10 +3,9 @@ using BookTracker.Api.Application.Books.CreateBook;
 using BookTracker.Api.Application.Books.DeleteBook;
 using BookTracker.Api.Application.Books.GetBookDetails;
 using BookTracker.Api.Application.Books.UpdateBook;
-using BookTracker.Api.Domain;
 using System.Security.Claims;
-using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Storage.Books;
+using BookTracker.Api.Middleware;
 
 namespace BookTracker.Api.Endpoints
 {
@@ -49,21 +48,10 @@ namespace BookTracker.Api.Endpoints
             CreateBookCommandHandler handler,
             ClaimsPrincipal principal)
         {
-            try
-            {
-                var actor = principal.ToActor();
+            var actor = principal.ToActor();
 
-                var response = await handler.Execute(actor, request);
-                return Results.Created($"/books/{response.Id}", response);
-            }
-            catch (ForbiddenOperationException)
-            {
-                return Results.Forbid();
-            }
-            catch (DomainException exception)
-            {
-                return Results.BadRequest(new { error = exception.Message });
-            }
+            var response = await handler.Execute(actor, request);
+            return Results.Created($"/books/{response.Id}", response);
         }
 
         public static async Task<IResult> UpdateBook(
@@ -72,30 +60,18 @@ namespace BookTracker.Api.Endpoints
             UpdateBookCommandHandler handler,
             ClaimsPrincipal principal)
         {
-            try
-            {
-                var actor = principal.ToActor();
+            var actor = principal.ToActor();
 
-                var result = await handler.Execute(actor, id, request);
+            var result = await handler.Execute(actor, id, request);
 
-                return result switch
-                {
-                    UpdateBookResult.Updated => Results.NoContent(),
-                    UpdateBookResult.NotFound => Results.NotFound(),
-                    UpdateBookResult.Conflict => Results.Conflict(
-                        new { error = "The book was changed by another user." }),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            catch (ForbiddenOperationException)
+            return result switch
             {
-                return Results.Forbid();
-            }
-            catch (DomainException exception)
-            {
-                return Results.BadRequest(new { error = exception.Message });
-            }
-
+                UpdateBookResult.Updated => Results.NoContent(),
+                UpdateBookResult.NotFound => Results.NotFound(),
+                UpdateBookResult.Conflict => Results.Conflict(
+                    new ErrorResponse("The book was changed by another user.")),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         public static async Task<IResult> DeleteBook(
@@ -103,18 +79,11 @@ namespace BookTracker.Api.Endpoints
             DeleteBookCommandHandler handler,
             ClaimsPrincipal principal)
         {
-            try
-            {
-                var actor = principal.ToActor();
-                var deleted = await handler.Execute(actor, id);
-                if (!deleted)
-                    return Results.NotFound();
-                return Results.NoContent();
-            }
-            catch (ForbiddenOperationException)
-            {
-                return Results.Forbid();
-            }
+            var actor = principal.ToActor();
+            var deleted = await handler.Execute(actor, id);
+            if (!deleted)
+                return Results.NotFound();
+            return Results.NoContent();
         }
     }
 }

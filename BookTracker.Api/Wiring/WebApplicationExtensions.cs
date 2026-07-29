@@ -2,6 +2,7 @@ using BookTracker.Api.Domain.Members;
 using BookTracker.Api.Endpoints;
 using BookTracker.Api.Endpoints.Auth;
 using BookTracker.Api.Endpoints.Members;
+using BookTracker.Api.Middleware;
 using BookTracker.Api.Seeding;
 using BookTracker.Api.Storage;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,7 @@ public static class WebApplicationExtensions
             }
         }
 
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseAuthentication();
         app.UseAuthorization();
 

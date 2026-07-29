@@ -1,13 +1,9 @@
-using BookTracker.Api.Application.Members;
 using BookTracker.Api.Application.Members.CreateMember;
 using BookTracker.Api.Application.Members.DeleteMember;
 using BookTracker.Api.Application.Members.GetMemberDetails;
 using BookTracker.Api.Application.Members.GetMemberSummaries;
 using BookTracker.Api.Application.Members.UpdateMember;
-using BookTracker.Api.Domain;
-using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Domain.Members;
-using BookTracker.Api.Security;
 using System.Security.Claims;
 
 namespace BookTracker.Api.Endpoints.Members;
@@ -36,15 +32,8 @@ public static class MemberEndpoints
         GetMemberSummariesQueryHandler query,
         ClaimsPrincipal principal)
     {
-        try
-        {
-            var actor = principal.ToActor();
-            return Results.Ok(await query.Execute(actor, request));
-        }
-        catch (ForbiddenOperationException)
-        {
-            return Results.Forbid();
-        }
+        var actor = principal.ToActor();
+        return Results.Ok(await query.Execute(actor, request));
     }
 
     public static async Task<IResult> GetMemberDetails(
@@ -52,37 +41,19 @@ public static class MemberEndpoints
         GetMemberDetailsQueryHandler query,
         ClaimsPrincipal principal)
     {
-        try
-        {
-            var actor = principal.ToActor();
-            var member = await query.Execute(actor, id);
-            if (member is null)
-                return Results.NotFound();
-            return Results.Ok(member);
-        }
-        catch (ForbiddenOperationException)
-        {
-            return Results.Forbid();
-        }
+        var actor = principal.ToActor();
+        var member = await query.Execute(actor, id);
+        if (member is null)
+            return Results.NotFound();
+        return Results.Ok(member);
     }
 
     public static async Task<IResult> CreateMember(
         CreateMemberRequest request,
         CreateMemberCommandHandler handler)
     {
-        try
-        {
-            var member = await handler.Execute(request);
-            return Results.Created($"/members/{member.Id}", member);
-        }
-        catch (MemberEmailAlreadyExistsException ex)
-        {
-            return Results.Conflict(new { error = ex.Message });
-        }
-        catch (DomainException ex)
-        {
-            return Results.BadRequest(new { error = ex.Message });
-        }
+        var member = await handler.Execute(request);
+        return Results.Created($"/members/{member.Id}", member);
     }
 
     public static async Task<IResult> UpdateMember(
@@ -91,26 +62,11 @@ public static class MemberEndpoints
         ClaimsPrincipal principal,
         UpdateMemberRequestHandler handler)
     {
-        try
-        {
-            var actor = principal.ToActor();
-            var updated = await handler.Execute(actor, id, request);
-            if (!updated)
-                return Results.NotFound();
-            return Results.NoContent();
-        }
-        catch (ForbiddenOperationException)
-        {
-            return Results.Forbid();
-        }
-        catch (MemberEmailAlreadyExistsException ex)
-        {
-            return Results.Conflict(new { error = ex.Message });
-        }
-        catch (DomainException ex)
-        {
-            return Results.BadRequest(new { error = ex.Message });
-        }
+        var actor = principal.ToActor();
+        var updated = await handler.Execute(actor, id, request);
+        if (!updated)
+            return Results.NotFound();
+        return Results.NoContent();
     }
 
     public static async Task<IResult> DeleteMember(
@@ -118,20 +74,13 @@ public static class MemberEndpoints
         ClaimsPrincipal principal,
         DeleteMemberHandler handler)
     {
-        try
-        {
-            var actor = principal.ToActor();
-            var deleted = await handler.Execute(actor, id);
+        var actor = principal.ToActor();
+        var deleted = await handler.Execute(actor, id);
 
-            if (!deleted)
-                return Results.NotFound();
+        if (!deleted)
+            return Results.NotFound();
 
-            return Results.NoContent();
-        }
-        catch (ForbiddenOperationException)
-        {
-            return Results.Forbid();
-        }
+        return Results.NoContent();
     }
 
     private static bool CanManageMember(ClaimsPrincipal user, int memberId)

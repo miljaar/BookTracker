@@ -10,7 +10,7 @@ public class MigrationTests
     [Fact]
     public async Task MigrationsCreateUsableDatabase()
     {
-        await using var connection = new SqliteConnection("DataSource=:memory");
+        await using var connection = new SqliteConnection("DataSource=:memory:");
         await connection.OpenAsync();
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
