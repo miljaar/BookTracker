@@ -9,6 +9,9 @@ public sealed record BookTitle
         if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Title is required.");
 
+        if (value.Contains('\0'))
+            throw new DomainException("Title can not contain a null character.");
+
         var cleaned = value.Trim();
 
         if (cleaned.Length > MaxLength)

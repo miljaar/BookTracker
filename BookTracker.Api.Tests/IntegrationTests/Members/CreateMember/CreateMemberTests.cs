@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Members.CreateMember;
 
-public class CreateMemberTests : IntegrationTest
+[Collection(PostgreSqlCollection.Name)]
+public class CreateMemberTests(PostgreSqlFixture database) : IntegrationTest(database)
 {
     [Fact]
     public async Task PostMemberCreatesMember()

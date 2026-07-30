@@ -10,6 +10,9 @@ public sealed record MemberEmail
         if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Memberemail is required.");
 
+        if (value.Contains('\0'))
+            throw new DomainException("Memberemail can not contain a null character.");
+
         var cleaned = value.Trim().ToLowerInvariant();
 
         if (!cleaned.Contains('@'))

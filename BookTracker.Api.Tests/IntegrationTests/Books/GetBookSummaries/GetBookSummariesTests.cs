@@ -6,7 +6,8 @@ using BookTracker.Api.Domain.Books;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Books.GetBookSummaries;
 
-public class GetBookSummariesTests : IntegrationTest
+[Collection(PostgreSqlCollection.Name)]
+public class GetBookSummariesTests(PostgreSqlFixture database) : IntegrationTest(database)
 {
 
     [Fact]
@@ -148,7 +149,7 @@ public class GetBookSummariesTests : IntegrationTest
                 });
         });
 
-        var response = await Client.GetAsync("/books?search=raymond");
+        var response = await Client.GetAsync("/books?search=RAYMOND");
 
         var result = await response.ReadJsonAs<PagedResult<BookSummary>>(HttpStatusCode.OK);
 
@@ -158,6 +159,127 @@ public class GetBookSummariesTests : IntegrationTest
         Assert.Equal("Raymond Chandler", book.Author);
         Assert.Equal(1, result.TotalItems);
         Assert.Equal(1, result.TotalPages);
+    }
+
+    [Fact]
+    public async Task GetBookSummariesCanSearchWithPercent()
+    {
+        Writer.Seed(db =>
+        {
+            db.Books.AddRange(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank%Herbert"),
+                    Year = 1965
+                },
+                new Book
+                {
+                    Title = new BookTitle("The Big Sleep"),
+                    Author = new AuthorName("Raymond Chandler"),
+                    Year = 1939
+                });
+        });
+
+        var response = await Client.GetAsync("/books?search=%");
+
+        var result = await response.ReadJsonAs<PagedResult<BookSummary>>(HttpStatusCode.OK);
+
+        var book = Assert.Single(result.Items);
+
+        Assert.Equal("Dune", book.Title);
+        Assert.Equal("Frank%Herbert", book.Author);
+        Assert.Equal(1, result.TotalItems);
+        Assert.Equal(1, result.TotalPages);
+    }
+
+    [Fact]
+    public async Task GetBookSummariesCanSearchWithUnderscore()
+    {
+        Writer.Seed(db =>
+        {
+            db.Books.AddRange(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
+                    Year = 1965
+                },
+                new Book
+                {
+                    Title = new BookTitle("The_Big Sleep"),
+                    Author = new AuthorName("Raymond Chandler"),
+                    Year = 1939
+                });
+        });
+
+        var response = await Client.GetAsync("/books?search=_");
+
+        var result = await response.ReadJsonAs<PagedResult<BookSummary>>(HttpStatusCode.OK);
+
+        var book = Assert.Single(result.Items);
+
+        Assert.Equal("The_Big Sleep", book.Title);
+        Assert.Equal("Raymond Chandler", book.Author);
+        Assert.Equal(1, result.TotalItems);
+        Assert.Equal(1, result.TotalPages);
+    }
+
+    [Fact]
+    public async Task GetBookSummariesCanSearchWithBackslash()
+    {
+        Writer.Seed(db =>
+        {
+            db.Books.AddRange(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
+                    Year = 1965
+                },
+                new Book
+                {
+                    Title = new BookTitle("The_Big\\Sleep"),
+                    Author = new AuthorName("Raymond Chandler"),
+                    Year = 1939
+                });
+        });
+
+        var response = await Client.GetAsync("/books?search=\\");
+
+        var result = await response.ReadJsonAs<PagedResult<BookSummary>>(HttpStatusCode.OK);
+
+        var book = Assert.Single(result.Items);
+
+        Assert.Equal("The_Big\\Sleep", book.Title);
+        Assert.Equal("Raymond Chandler", book.Author);
+        Assert.Equal(1, result.TotalItems);
+        Assert.Equal(1, result.TotalPages);
+    }
+
+    [Fact]
+    public async Task GetBookSummariesCanSearchWithNulChar()
+    {
+        Writer.Seed(db =>
+        {
+            db.Books.AddRange(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
+                    Year = 1965
+                },
+                new Book
+                {
+                    Title = new BookTitle("The_Big\\Sleep"),
+                    Author = new AuthorName("Raymond Chandler"),
+                    Year = 1939
+                });
+        });
+
+        var response = await Client.GetAsync("/books?search=\0");
+
+        await response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
     }
 
     [Fact]

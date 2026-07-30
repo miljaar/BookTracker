@@ -1,0 +1,2 @@
+dotnet test start een tijdelijke PostgreSQL-container.
+Docker Desktop of Docker Engine moet actief zijn.

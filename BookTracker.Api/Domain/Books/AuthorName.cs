@@ -10,6 +10,9 @@ public sealed record AuthorName
         if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Author is required.");
 
+        if (value.Contains('\0'))
+            throw new DomainException("Author name can not contain a null character.");
+
         var cleaned = value.Trim();
 
         if (cleaned.Length > MaxLength)

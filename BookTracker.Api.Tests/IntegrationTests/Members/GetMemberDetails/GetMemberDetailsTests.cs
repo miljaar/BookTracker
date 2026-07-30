@@ -7,7 +7,8 @@ using BookTracker.Api.Domain.Members;
 
 namespace BookTracker.Api.Tests.IntegrationTests.Members.GetMemberDetails;
 
-public class GetMemberDetailsTests : IntegrationTest
+[Collection(PostgreSqlCollection.Name)]
+public class GetMemberDetailsTests(PostgreSqlFixture database) : IntegrationTest(database)
 {
     [Fact]
     public async Task GetMemberDetailsReturnDetails()

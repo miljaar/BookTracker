@@ -1,3 +1,4 @@
+using BookTracker.Api.Domain;
 using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,10 +19,19 @@ namespace BookTracker.Api.Application.Books.GetBookSummaries
 
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
-                var search = $"%{request.Search.Trim()}%";
+                if (request.Search.Contains('\0'))
+                    throw new DomainException("Invalid search term.");
+
+                var search = request.Search
+                    .Trim()
+                    .Replace("\\", "\\\\")
+                    .Replace("%", "\\%")
+                    .Replace("_", "\\_");
+
+                search = $"%{search}%";
                 query = query.Where(book =>
-                    EF.Functions.Like((string)book.Title, search) ||
-                    EF.Functions.Like((string)book.Author, search));
+                    EF.Functions.ILike((string)book.Title, search, "\\") ||
+                    EF.Functions.ILike((string)book.Author, search, "\\"));
             }
 
             var totalItems = await query.CountAsync();

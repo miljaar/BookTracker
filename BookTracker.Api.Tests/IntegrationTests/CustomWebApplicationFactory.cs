@@ -1,17 +1,16 @@
 using BookTracker.Api.Storage;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BookTracker.Api.Tests.IntegrationTests;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+public class CustomWebApplicationFactory(PostgreSqlFixture database) : WebApplicationFactory<Program>
 {
-    private SqliteConnection? connection;
     public EfReader GetReader() => new(Services);
     public EfWriter GetWriter() => new(Services);
     private static readonly KeyValuePair<string, string?>[] TestSettings =
@@ -47,33 +46,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         });
 
         builder.ConfigureServices(services =>
-        {
-            var descriptor = services.SingleOrDefault(service =>
-                service.ServiceType == typeof(DbContextOptions<AppDbContext>));
+               {
+                   services.RemoveAll<DbContextOptions<AppDbContext>>();
 
-            if (descriptor is not null)
-            {
-                services.Remove(descriptor);
-            }
-
-            connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(connection));
-
-            var sp = services.BuildServiceProvider();
-            using var scope = sp.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.EnsureCreated();
-        });
+                   services.AddDbContext<AppDbContext>(options =>
+                       options.UseNpgsql(database.ConnectionString));
+               });
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-            connection?.Dispose();
-
         base.Dispose(disposing);
     }
 }

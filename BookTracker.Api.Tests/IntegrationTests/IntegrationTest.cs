@@ -7,18 +7,33 @@ using BookTracker.Api.Application.Auth.Login;
 
 namespace BookTracker.Api.Tests.IntegrationTests;
 
-public abstract class IntegrationTest : IDisposable
+public abstract class IntegrationTest : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory factory = new();
+    private readonly PostgreSqlFixture database;
+    private readonly CustomWebApplicationFactory factory;
     protected HttpClient Client { get; }
     protected EfReader Reader { get; }
     protected EfWriter Writer { get; }
 
-    protected IntegrationTest()
+    protected IntegrationTest(PostgreSqlFixture database)
     {
+        this.database = database;
+        factory = new CustomWebApplicationFactory(database);
         Client = factory.CreateClient();
         Reader = factory.GetReader();
         Writer = factory.GetWriter();
+    }
+
+    public Task InitializeAsync()
+    {
+        return database.ResetAsync();
+    }
+
+    public Task DisposeAsync()
+    {
+        Client.Dispose();
+        factory.Dispose();
+        return Task.CompletedTask;
     }
 
     protected int SeedMember(

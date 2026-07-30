@@ -10,6 +10,9 @@ public sealed record MemberName
         if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Membername is required.");
 
+        if (value.Contains('\0'))
+            throw new DomainException("Membername can not contain a null character.");
+
         var cleaned = value.Trim();
 
         if (cleaned.Length > MaxLength)

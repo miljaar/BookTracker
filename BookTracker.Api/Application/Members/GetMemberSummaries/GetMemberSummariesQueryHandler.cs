@@ -1,3 +1,4 @@
+using BookTracker.Api.Domain;
 using BookTracker.Api.Domain.Actors;
 using BookTracker.Api.Domain.Members;
 using BookTracker.Api.Storage;
@@ -25,10 +26,19 @@ public class GetMemberSummariesQueryHandler(AppDbContext dbContext) : IHandler
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            var search = $"%{request.Search.Trim()}%";
+            if (request.Search.Contains('\0'))
+                throw new DomainException("Invalid search term.");
+
+            var search = request.Search
+                .Trim()
+                .Replace("\\", "\\\\")
+                .Replace("%", "\\%")
+                .Replace("_", "\\_");
+
+            search = $"%{search}%";
             query = query.Where(member =>
-                EF.Functions.Like((string)member.Name, search) ||
-                EF.Functions.Like((string)member.Email, search));
+                EF.Functions.ILike((string)member.Name, search) ||
+                EF.Functions.ILike((string)member.Email, search));
         }
 
         var totalMembers = await query.CountAsync();
