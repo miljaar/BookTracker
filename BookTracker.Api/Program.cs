@@ -10,7 +10,7 @@ using BookTracker.Api.Seeding;
 using BookTracker.Api.Wiring;
 
 var builder = WebApplication.CreateBuilder(args);
-var frontendOrigin = builder.Configuration["FrontendOrigin"] ?? "http://localhost:5173";
+var frontendOrigin = builder.Configuration["FrontendOrigin"] ?? "http://localhost:5119";
 
 builder.AddBookTracker();
 builder.Services.AddCors(options =>
